@@ -10,15 +10,28 @@ class NewsFormatter:
     """Formats news items into readable output"""
 
     @staticmethod
-    def format_single_news(news: NewsItem, show_id: bool = True) -> str:
+    def format_single_news(news: NewsItem, show_id: bool = True, show_url: bool = True) -> str:
         """Format a single news item"""
         tickers_str = "/".join(news.tickers) if news.tickers else ""
         ticker_prefix = f"{tickers_str}: " if tickers_str else ""
 
+        lines = []
         if show_id:
-            return f"{news.id}) {ticker_prefix}{news.title}"
+            lines.append(f"{news.id}) {ticker_prefix}{news.title}")
         else:
-            return f"{ticker_prefix}{news.title}"
+            lines.append(f"{ticker_prefix}{news.title}")
+
+        # Add source and URL on a new line if available
+        if show_url and (news.source or news.url):
+            details = []
+            if news.source:
+                details.append(f"Nguồn: {news.source}")
+            if news.url:
+                details.append(f"Link: {news.url}")
+            if details:
+                lines.append(f"   {' | '.join(details)}")
+
+        return "\n".join(lines)
 
     @staticmethod
     def format_news_list(news_items: List[NewsItem], title: str = "TIN NHANH CHỨNG KHOÁN") -> str:

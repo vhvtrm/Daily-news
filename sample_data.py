@@ -65,6 +65,20 @@ class SampleNewsGenerator:
         "Siêu nút giao 3 tầng kết nối 2 tuyến cao tốc trị giá {value} tỷ sắp hoàn thành",
     ]
 
+    # Popular Vietnamese financial news websites
+    NEWS_SOURCES = [
+        {"name": "CafeF", "domain": "cafef.vn"},
+        {"name": "VietStock", "domain": "vietstock.vn"},
+        {"name": "CafeBiz", "domain": "cafebiz.vn"},
+        {"name": "Nhịp Đầu Tư", "domain": "ndh.vn"},
+        {"name": "Báo Đầu Tư", "domain": "baodautu.vn"},
+        {"name": "VnEconomy", "domain": "vneconomy.vn"},
+        {"name": "Thời Báo Kinh Tế", "domain": "tbktvn.com"},
+        {"name": "Đầu Tư Chứng Khoán", "domain": "stockbiz.vn"},
+        {"name": "Doanh Nghiệp", "domain": "doanhnghiep.vn"},
+        {"name": "Tài Chính Online", "domain": "taichinh.vn"},
+    ]
+
     @staticmethod
     def generate_news_item(category: NewsCategory, news_id: int) -> NewsItem:
         """Generate a single random news item"""
@@ -105,13 +119,30 @@ class SampleNewsGenerator:
         # Determine tickers
         tickers = [ticker] if "{ticker}" in template else []
 
+        # Generate realistic URL
+        source = random.choice(SampleNewsGenerator.NEWS_SOURCES)
+        article_id = random.randint(100000, 999999)
+        year = datetime.now().year
+        month = datetime.now().month
+
+        # Generate URL based on common Vietnamese news site patterns
+        url_patterns = [
+            f"https://{source['domain']}/{ticker.lower()}-{article_id}.html",
+            f"https://{source['domain']}/{year}/{month:02d}/{ticker.lower()}-{article_id}.chn",
+            f"https://{source['domain']}/chung-khoan/{ticker.lower()}-{article_id}",
+            f"https://{source['domain']}/doanh-nghiep/{ticker.lower()}-tin-{article_id}.html",
+        ]
+
+        url = random.choice(url_patterns)
+
         return NewsItem(
             id=news_id,
             title=title,
             category=category,
             tickers=tickers,
             date=datetime.now() - timedelta(days=random.randint(0, 7)),
-            source="Sample Generator",
+            source=source['name'],
+            url=url,
             importance=random.randint(1, 5)
         )
 
