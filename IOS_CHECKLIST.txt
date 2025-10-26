@@ -1,0 +1,98 @@
+📱 iOS DEPLOYMENT CHECKLIST
+Vietnam Stock Market News App
+
+□ STEP 1: GET PYTHONISTA
+  □ Open App Store on iPhone/iPad
+  □ Search "Pythonista 3"
+  □ Purchase app ($9.99)
+  □ Install and open
+
+□ STEP 2: TRANSFER FILES TO PYTHONISTA
+  Choose one method:
+
+  METHOD A: Copy-Paste (Recommended)
+  □ On computer: Open each .py file from GitHub
+  □ Click "Raw" button to see plain text
+  □ Copy entire content (Cmd+A, Cmd+C)
+  □ On iPhone: Open Pythonista
+  □ Tap 📄 icon (top right)
+  □ Tap + button
+  □ Paste code (long press > Paste)
+  □ Name file exactly as original
+  □ Tap "Done"
+  □ Repeat for all 6 files
+
+  Files needed:
+  □ models.py
+  □ database.py
+  □ news_collector.py
+  □ news_formatter.py
+  □ sample_data.py
+  □ main_ios.py
+
+  METHOD B: iCloud Drive
+  □ On computer: Zip all .py files
+  □ Upload to iCloud Drive
+  □ On iPhone: Open Pythonista
+  □ Tap ⚙️ > External Files > iCloud
+  □ Find zip file
+  □ Extract files
+
+□ STEP 3: RUN THE APP
+  □ In Pythonista, tap on "main_ios.py"
+  □ Tap ▶️ play button (top right)
+  □ Wait for app to start
+
+□ STEP 4: GENERATE NEWS
+  □ When menu appears, type "1"
+  □ Press Enter/Return
+  □ Wait for 100 news items to generate
+  □ Press Enter to continue
+
+□ STEP 5: VIEW NEWS
+  □ Type "2" to see all news
+  OR
+  □ Type "3" to see 20 most recent
+  □ Scroll through the news list
+  □ Each item shows: Title, Source, URL
+
+□ STEP 6: TRY OTHER FEATURES
+  □ Type "4" to search by ticker (try: VNM, HPG, TCB)
+  □ Type "5" to browse by category
+  □ Type "6" to export to file
+  □ Type "7" to see statistics
+
+□ STEP 7: ACCESS EXPORTED FILES
+  □ Export news (option 6)
+  □ Open Files app on iOS
+  □ Navigate to: Pythonista 3/Documents/
+  □ Find your .txt file
+  □ Tap to view or share
+
+✅ VERIFICATION
+  □ Menu appears when running main_ios.py
+  □ Can generate 100 news items
+  □ Can view news with URLs
+  □ Can export to file
+  □ Files appear in Documents folder
+
+🎉 SUCCESS!
+You now have Vietnam Stock Market News running on your iPhone!
+
+📝 NOTES:
+- Database file is automatically created: vietnam_news.db
+- All files stored in: Pythonista 3/Documents/
+- Can share exported files via Messages, Email, etc.
+- Run anytime by opening Pythonista and tapping main_ios.py
+
+⚠️ COMMON ISSUES:
+- "Module not found" → Make sure all 6 files are in same folder
+- "Can't find file" → Files are in Pythonista's Documents folder
+- App slow → Close other apps, restart Pythonista
+
+💡 TIPS:
+- Add Pythonista widget to home screen for quick access
+- Create iOS Shortcut to run with one tap
+- Export daily to keep news archive
+
+Need help? See: ios_deployment.md for full guide
