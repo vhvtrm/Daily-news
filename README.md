@@ -5,6 +5,7 @@ A Python application for collecting, organizing, and managing news about the Vie
 ## Features
 
 - Collect and store up to 100+ news items about Vietnam stock market
+- **Every news item includes source and URL link** to Vietnamese financial news websites
 - Automatic categorization into 6 main categories:
   - **DOANH NGHIỆP** (Enterprises/Companies)
   - **MUA BÁN/PHÁT HÀNH** (Trading/Issuance)
@@ -13,10 +14,13 @@ A Python application for collecting, organizing, and managing news about the Vie
   - **CHỨNG KHOÁN/TÀI CHÍNH** (Securities/Finance)
   - **VIỆT NAM** (Vietnam Economy)
 - Extract and track stock ticker symbols (POW, MWG, TCB, etc.)
+- Integrated with 10 popular Vietnamese financial news sources:
+  - CafeF, VietStock, CafeBiz, Nhịp Đầu Tư, Báo Đầu Tư
+  - VnEconomy, Thời Báo Kinh Tế, Đầu Tư Chứng Khoán, and more
 - SQLite database for persistent storage
 - Beautiful formatted output similar to Vietnamese financial news digests
 - Search functionality by ticker or category
-- Export to text files
+- Export to text files with clickable URLs
 
 ## Installation
 
@@ -170,7 +174,7 @@ Each news item contains:
 
 ## Output Format
 
-The app generates beautifully formatted news digests:
+The app generates beautifully formatted news digests with source URLs:
 
 ```
 TIN NHANH CHỨNG KHOÁN 26/10
@@ -178,18 +182,31 @@ TIN NHANH CHỨNG KHOÁN 26/10
 => DOANH NGHIỆP
 
 1) POW: Gã khổng lồ 35.000 tỷ của ngành điện lần đầu muốn tăng vốn thêm 7.000 tỷ
+   Nguồn: CafeF | Link: https://cafef.vn/pow-123456.html
+
 2) MWG: Bách Hóa Xanh tăng tốc tìm mặt bằng để Bắc tiến
+   Nguồn: VietStock | Link: https://vietstock.vn/chung-khoan/mwg-789012
+
 3) TCB: Techcombank tính chuyện chế tác vàng miếng thương hiệu Techcombank
+   Nguồn: CafeBiz | Link: https://cafebiz.vn/doanh-nghiep/tcb-tin-345678.html
 
 _
 
 => CỔ TỨC
 
 21) CTR: Lãi kỷ lục, chốt quyền trả cổ tức bằng tiền tỷ lệ 21%
+   Nguồn: Nhịp Đầu Tư | Link: https://ndh.vn/ctr-456789.html
+
 22) PVD: Lãi tăng mạnh, dành gần 280 tỷ đồng trả cổ tức
+   Nguồn: Báo Đầu Tư | Link: https://baodautu.vn/chung-khoan/pvd-567890
 
 _
 ```
+
+**Each news item now includes:**
+- 📰 News title with stock ticker
+- 🌐 Source name (Nguồn)
+- 🔗 Direct link (Link) to the article
 
 ## Extending the Application
 
