@@ -11,6 +11,7 @@ from database import NewsDatabase
 from news_collector import NewsCollector
 from news_formatter import NewsFormatter
 from sample_data import SampleNewsGenerator
+from real_news_scraper import collect_real_news
 
 
 class NewsApp:
@@ -53,6 +54,18 @@ class NewsApp:
             self.db.add_news(news)
 
         print(f"Successfully generated and saved {count} news items")
+        return news_items
+
+    def scrape_real_news(self, count: int = 100):
+        """Scrape real news from Vietnamese financial websites"""
+        print(f"Scraping {count} REAL news items from Vietnamese websites...")
+        news_items = collect_real_news(count)
+
+        print(f"Saving to database...")
+        for news in news_items:
+            self.db.add_news(news)
+
+        print(f"Successfully scraped and saved {len(news_items)} real news items")
         return news_items
 
     def add_manual_news(self, title: str, tickers: list, category: str):
@@ -149,7 +162,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Generate 100 sample news items
+  # Scrape 100 REAL news from Vietnamese websites
+  python main.py --scrape 100
+
+  # Generate 100 sample/demo news items
   python main.py --generate 100
 
   # Show all news
@@ -179,7 +195,8 @@ Examples:
     )
 
     parser.add_argument('--db', default='vietnam_news.db', help='Database file path')
-    parser.add_argument('--generate', type=int, metavar='COUNT', help='Generate N sample news items')
+    parser.add_argument('--scrape', type=int, metavar='COUNT', help='Scrape N REAL news from Vietnamese websites')
+    parser.add_argument('--generate', type=int, metavar='COUNT', help='Generate N sample/demo news items')
     parser.add_argument('--show', action='store_true', help='Show all news')
     parser.add_argument('--limit', type=int, help='Limit number of news items shown')
     parser.add_argument('--ticker', help='Search news by stock ticker')
@@ -195,7 +212,12 @@ Examples:
     app = NewsApp(args.db)
 
     # Handle commands
-    if args.generate:
+    if args.scrape:
+        app.scrape_real_news(args.scrape)
+        if not args.export and not args.show:
+            print("\nUse --show to display the news or --export to save to file")
+
+    elif args.generate:
         app.generate_sample_news(args.generate)
         if not args.export and not args.show:
             print("\nUse --show to display the news or --export to save to file")
