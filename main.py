@@ -56,16 +56,26 @@ class NewsApp:
         print(f"Successfully generated and saved {count} news items")
         return news_items
 
-    def scrape_real_news(self, count: int = 100):
+    def scrape_real_news(self, count: int = 50):
         """Scrape real news from Vietnamese financial websites"""
-        print(f"Scraping {count} REAL news items from Vietnamese websites...")
+        print(f"\n{'='*60}")
+        print(f"📰 SCRAPING REAL NEWS (NOT FAKE/GENERATED)")
+        print(f"{'='*60}\n")
+        print(f"Target: {count} unique, real news items")
+        print(f"Sources: CafeF, VietStock, VnEconomy, CafeBiz\n")
+
         news_items = collect_real_news(count)
 
-        print(f"Saving to database...")
-        for news in news_items:
-            self.db.add_news(news)
+        if news_items:
+            print(f"\n💾 Saving {len(news_items)} real news to database...")
+            for news in news_items:
+                self.db.add_news(news)
 
-        print(f"Successfully scraped and saved {len(news_items)} real news items")
+            print(f"✅ Successfully scraped and saved {len(news_items)} REAL news items")
+            print(f"   All news are unique (duplicates removed)\n")
+        else:
+            print(f"⚠️ No news items were collected. Check internet connection.")
+
         return news_items
 
     def add_manual_news(self, title: str, tickers: list, category: str):
@@ -162,17 +172,17 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Scrape 100 REAL news from Vietnamese websites
-  python main.py --scrape 100
+  # Scrape 50 REAL news from Vietnamese websites (RECOMMENDED)
+  python main.py --scrape 50
 
-  # Generate 100 sample/demo news items
-  python main.py --generate 100
+  # Generate 50 sample/demo news items (for testing only)
+  python main.py --generate 50
 
   # Show all news
   python main.py --show
 
-  # Show only 50 most recent news
-  python main.py --show --limit 50
+  # Show only 30 most recent news
+  python main.py --show --limit 30
 
   # Search for news about a specific ticker
   python main.py --ticker VNM
@@ -181,7 +191,7 @@ Examples:
   python main.py --category "DOANH NGHIỆP"
 
   # Export to file
-  python main.py --export news_output.txt
+  python main.py --export news_output.txt --limit 50
 
   # Import from text file
   python main.py --import news_input.txt
@@ -191,6 +201,8 @@ Examples:
 
   # Clear database
   python main.py --clear
+
+Note: --scrape gets REAL news (not fake), --generate creates sample data
         """
     )
 

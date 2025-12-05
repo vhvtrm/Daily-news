@@ -422,17 +422,51 @@ class RealNewsScraper:
         print(f"   ✅ Got {len(news_items)} news from CafeBiz")
         return news_items[:limit]
 
-    def scrape_all_sources(self, total_limit: int = 100) -> List[NewsItem]:
+    def is_similar_title(self, title1: str, title2: str) -> bool:
+        """Check if two titles are similar (potential duplicates)"""
+        # Normalize titles
+        t1 = title1.lower().strip()
+        t2 = title2.lower().strip()
+
+        # Check if one is substring of another
+        if t1 in t2 or t2 in t1:
+            return True
+
+        # Check first 40 characters similarity
+        if len(t1) >= 40 and len(t2) >= 40:
+            if t1[:40] == t2[:40]:
+                return True
+
+        return False
+
+    def remove_duplicates(self, news_list: List[NewsItem]) -> List[NewsItem]:
+        """Remove duplicate news items based on title similarity"""
+        unique_news = []
+
+        for news in news_list:
+            is_duplicate = False
+            for existing in unique_news:
+                if self.is_similar_title(news.title, existing.title):
+                    is_duplicate = True
+                    break
+
+            if not is_duplicate:
+                unique_news.append(news)
+
+        return unique_news
+
+    def scrape_all_sources(self, total_limit: int = 50) -> List[NewsItem]:
         """
         Scrape news from all available sources
-        Returns combined list of real news items
+        Returns combined list of real news items (default 50)
         """
         all_news = []
 
         print("\n🌐 Starting to scrape REAL news from Vietnamese financial websites...\n")
+        print(f"🎯 Target: {total_limit} unique, real news items\n")
 
         # Calculate how many to get from each source
-        per_source = total_limit // 4 + 5  # Get a bit more, then trim
+        per_source = (total_limit // 4) + 10  # Get extra to account for duplicates
 
         # Scrape from each source
         try:
@@ -459,16 +493,13 @@ class RealNewsScraper:
         except Exception as e:
             print(f"❌ CafeBiz scraping failed: {e}")
 
-        # Remove duplicates based on title similarity
-        unique_news = []
-        seen_titles = set()
+        print(f"\n🔍 Removing duplicate news...")
+        print(f"   Before: {len(all_news)} news items")
 
-        for news in all_news:
-            # Create a simplified version of title for comparison
-            simple_title = news.title.lower()[:50]
-            if simple_title not in seen_titles:
-                seen_titles.add(simple_title)
-                unique_news.append(news)
+        # Remove duplicates using similarity check
+        unique_news = self.remove_duplicates(all_news)
+
+        print(f"   After: {len(unique_news)} unique news items")
 
         # Re-number the news items
         for i, news in enumerate(unique_news, 1):
@@ -477,21 +508,23 @@ class RealNewsScraper:
         # Trim to requested limit
         final_news = unique_news[:total_limit]
 
-        print(f"\n✅ Total: {len(final_news)} REAL news items collected from multiple sources!")
-        print(f"   Sources: CafeF, VietStock, VnEconomy, CafeBiz\n")
+        print(f"\n✅ Total: {len(final_news)} REAL news items collected!")
+        print(f"   Sources: CafeF, VietStock, VnEconomy, CafeBiz")
+        print(f"   All news are unique (no duplicates)\n")
 
         return final_news
 
 
-def collect_real_news(count: int = 100) -> List[NewsItem]:
+def collect_real_news(count: int = 50) -> List[NewsItem]:
     """
     Main function to collect real news from Vietnamese financial websites
 
     Args:
-        count: Number of news items to collect (default 100)
+        count: Number of news items to collect (default 50)
 
     Returns:
         List of real NewsItem objects with actual headlines and URLs
+        All news are unique (no duplicates)
     """
     scraper = RealNewsScraper()
     return scraper.scrape_all_sources(count)
@@ -499,8 +532,8 @@ def collect_real_news(count: int = 100) -> List[NewsItem]:
 
 if __name__ == "__main__":
     # Test the scraper
-    news = collect_real_news(100)
-    print(f"\nCollected {len(news)} real news items:")
+    news = collect_real_news(50)
+    print(f"\nCollected {len(news)} REAL, UNIQUE news items:")
     for item in news[:10]:
         print(f"\n{item.id}) {item.title}")
         print(f"   Source: {item.source} | URL: {item.url}")
